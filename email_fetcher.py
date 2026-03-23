@@ -1,13 +1,17 @@
-# email_fetcher.py
 import imaplib
+import smtplib
 import email
 from email.header import decode_header
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import os
 import re
 
-IMAP_CONFIG = {"g": ("imap.gmail.com", 993),"y": ("imap.yandex.ru", 993)}
+# почтовые сервера
+IMAP_CONFIG = {"g": ("imap.gmail.com", 993), "y": ("imap.yandex.ru", 993)}
+SMTP_CONFIG = {"g": ("smtp.gmail.com", 587), "y": ("smtp.yandex.ru", 587)}
 
-def _decode_header_safe(value):
+def decode_header_safe(value):
     if value is None:
         return ""
     parts = decode_header(value)
@@ -26,33 +30,30 @@ def _decode_header_safe(value):
     return "".join(decoded_fragments)
 
 
-def _html_to_text(html_content):
-    """Конвертирует HTML в простой текст"""
-    if not html_content:
+def html_to_text(cont):
+    if not cont:
         return ""
 
-    html_content = re.sub(r'<script.*?>.*?</script>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
-    html_content = re.sub(r'<style.*?>.*?</style>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
-    html_content = re.sub(r'<br\s*/?>', '\n', html_content, flags=re.IGNORECASE)
-    html_content = re.sub(r'<p.*?>', '\n', html_content, flags=re.IGNORECASE)
-    html_content = re.sub(r'</p>', '\n', html_content, flags=re.IGNORECASE)
-    html_content = re.sub(r'<div.*?>', '\n', html_content, flags=re.IGNORECASE)
-    html_content = re.sub(r'</div>', '\n', html_content, flags=re.IGNORECASE)
-    html_content = re.sub(r'<.*?>', '', html_content)
-    html_content = html_content.replace('&nbsp;', ' ')
-    html_content = html_content.replace('&lt;', '<')
-    html_content = html_content.replace('&gt;', '>')
-    html_content = html_content.replace('&amp;', '&')
-    html_content = html_content.replace('&quot;', '"')
-    html_content = re.sub(r'\n\s*\n', '\n\n', html_content)
-    html_content = html_content.strip()
-    return html_content
+    cont = re.sub(r'<script.*?>.*?</script>', '', cont, flags=re.DOTALL | re.IGNORECASE)
+    cont = re.sub(r'<style.*?>.*?</style>', '', cont, flags=re.DOTALL | re.IGNORECASE)
+    cont = re.sub(r'<br\s*/?>', '\n', cont, flags=re.IGNORECASE)
+    cont = re.sub(r'<p.*?>', '\n', cont, flags=re.IGNORECASE)
+    cont = re.sub(r'</p>', '\n', cont, flags=re.IGNORECASE)
+    cont = re.sub(r'<div.*?>', '\n', cont, flags=re.IGNORECASE)
+    cont = re.sub(r'</div>', '\n', cont, flags=re.IGNORECASE)
+    cont = re.sub(r'<.*?>', '', cont)
+    cont = cont.replace('&nbsp;', ' ')
+    cont = cont.replace('&lt;', '<')
+    cont = cont.replace('&gt;', '>')
+    cont = cont.replace('&amp;', '&')
+    cont = cont.replace('&quot;', '"')
+    cont = re.sub(r'\n\s*\n', '\n\n', cont)
+    cont = cont.strip()
+    return cont
 
 def extract_text_from_email(msg):
-    """Рекурсивно извлекает текст из email сообщения"""
     text_parts = []
     html_parts = []
-
     if msg.is_multipart():
         for part in msg.walk():
             content_type = part.get_content_type()
@@ -94,11 +95,11 @@ def extract_text_from_email(msg):
         return "\n".join(text_parts).strip()
     elif html_parts:
         html_text = "\n".join(html_parts)
-        return _html_to_text(html_text).strip()
+        return html_to_text(html_text).strip()
     else:
         return ""
 
-def fetch_emails(provider, email_address, password, mailbox="INBOX", save_dir="attachments", limit=None):
+def fetch_emails(provider, email_address, password, mailbox="INBOX", save_dir="attachments", limit=None, exclude_ids=None):
     server, port = IMAP_CONFIG[provider]
     imap = imaplib.IMAP4_SSL(server, port)
     imap.login(email_address, password)
@@ -111,37 +112,49 @@ def fetch_emails(provider, email_address, password, mailbox="INBOX", save_dir="a
     os.makedirs(save_dir, exist_ok=True)
     if limit:
         mail_ids = mail_ids[-limit:]
+    exclude_ids = exclude_ids or set()
     for mail_id in mail_ids:
         status, msg_data = imap.fetch(mail_id, "(RFC822)")
         if status != "OK":
             continue
-        try:
-            msg = email.message_from_bytes(msg_data[0][1])
-            msgid = mail_id.decode() if isinstance(mail_id, bytes) else str(mail_id)
-            subj = _decode_header_safe(msg.get("Subject"))
-            from_ = _decode_header_safe(msg.get("From"))
-            body_text = extract_text_from_email(msg)
-            attachments = []
-            for part in msg.walk():
-                content_disposition = str(part.get("Content-Disposition") or "")
-                if "attachment" in content_disposition:
-                    filename = part.get_filename()
-                    if filename:
-                        filename = _decode_header_safe(filename)
-                        mail_dir = os.path.join(save_dir, msgid)
-                        os.makedirs(mail_dir, exist_ok=True)
-                        ext = os.path.splitext(filename)[1] or ".bin"
-                        file_index = len(os.listdir(mail_dir)) + 1
-                        path = os.path.join(mail_dir, f"{file_index}{ext}")
-                        with open(path, "wb") as f:
-                            payload = part.get_payload(decode=True)
-                            if payload:
-                                f.write(payload)
-                        attachments.append({"name": filename, "path": path})
-            results.append({"id": msgid,"from": from_,"subject": subj,"text": body_text,"attachments": attachments,"raw": msg})
-        except Exception as e:
-            print(f"Ошибка обработки письма {mail_id}: {e}")
+        msg = email.message_from_bytes(msg_data[0][1])
+        msgid = mail_id.decode() if isinstance(mail_id, bytes) else str(mail_id)
+        if msgid in exclude_ids:
             continue
+        subj = decode_header_safe(msg.get("Subject"))
+        from_ = decode_header_safe(msg.get("From"))
+        body_text = extract_text_from_email(msg)
+        attachments = []
+        for part in msg.walk():
+            content_disposition = str(part.get("Content-Disposition") or "")
+            if "attachment" in content_disposition:
+                filename = part.get_filename()
+                if filename:
+                    filename = decode_header_safe(filename)
+                    mail_dir = os.path.join(save_dir, msgid)
+                    os.makedirs(mail_dir, exist_ok=True)
+                    ext = os.path.splitext(filename)[1] or ".bin"
+                    file_index = len(os.listdir(mail_dir)) + 1
+                    path = os.path.join(mail_dir, f"{file_index}{ext}")
+                    with open(path, "wb") as f:
+                        payload = part.get_payload(decode=True)
+                        if payload:
+                            f.write(payload)
+                    attachments.append({"name": filename, "path": path})
+        results.append({"id": msgid,"from": from_,"subject": subj,"text": body_text,"attachments": attachments,"raw": msg})
     imap.close()
     imap.logout()
     return results
+
+
+def send_email(provider, email_address, password, to_addr, subject, body):
+    server, port = SMTP_CONFIG[provider]
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = email_address
+    msg["To"] = to_addr
+    msg.attach(MIMEText(body or "", "plain", "utf-8"))
+    with smtplib.SMTP(server, port) as smtp:
+        smtp.starttls()
+        smtp.login(email_address, password)
+        smtp.sendmail(email_address, [to_addr.strip()], msg.as_string())
