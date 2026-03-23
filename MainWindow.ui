@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Безопасная почта</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+
+QMainWindow {
+    background-color: rgb(24, 24, 24);
+}
+
+/* Заголовок */
+QLabel#titleLabel {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 12px;
+}
+
+/* Левая панель */
+QWidget#leftPanel {
+    background-color: rgb(30,30,30);
+    border-right: 1px solid #444;
+}
+
+/* Зона писем (светлее фона) */
+QWidget#mailArea {
+    background-color: rgb(36,36,36);
+    border-radius: 6px;
+}
+
+/* Кнопки */
+QPushButton {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 20px;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #4a4a4a;
+}
+
+QPushButton:pressed {
+    background-color: #2e2e2e;
+}
+
+QPushButton#sendButton {
+    min-height: 45px;
+    font-size: 15px;
+}
+
+/* Таблица */
+QTableView {
+    background-color: rgb(36,36,36);
+    color: white;
+    border: none;
+    gridline-color: #444;
+}
+
+QHeaderView::section {
+    background-color: #3c3c3c;
+    color: white;
+    padding: 6px;
+    border: 1px solid #555;
+}
+
+QTableView::item:selected {
+    background-color: #505050;
+}
+
+   </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayoutMain">
+    <item>
+     <widget class="QLabel" name="titleLabel">
+      <property name="text">
+       <string>Безопасная почта</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="mainLayout">
+      <item>
+       <layout class="QVBoxLayout">
+        <item>
+         <widget class="QPushButton" name="sendButton">
+          <property name="text">
+           <string>Отправить</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="refreshButton">
+          <property name="text">
+           <string>Обновить</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="inboxButton">
+          <property name="text">
+           <string>Входящие</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="allMailButton">
+          <property name="text">
+           <string>Вся почта</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="sentButton">
+          <property name="text">
+           <string>Отправленные</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout">
+        <item>
+         <widget class="QStackedWidget" name="stackedWidget">
+          <widget class="QWidget" name="inboxPage">
+           <layout class="QVBoxLayout">
+            <item>
+             <widget class="QTableView" name="inboxTable"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="allMailPage">
+           <layout class="QVBoxLayout">
+            <item>
+             <widget class="QTableView" name="allMailTable"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="sentPage">
+           <layout class="QVBoxLayout">
+            <item>
+             <widget class="QTableView" name="sentTable"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

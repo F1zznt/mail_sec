@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>input_data</class>
+ <widget class="QDialog" name="input_data">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>464</width>
+    <height>473</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(24, 24, 24)</string>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>390</y>
+     <width>161</width>
+     <height>47</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: rgb(40, 40, 40);
+    color: #ffffff;
+    border: 1px solid rgb(80, 80, 80);
+    border-radius: 4px;
+    padding: 10px 20px;
+    font: bold 14px 'Arial Black', 'Arial', sans-serif;
+    min-height: 25px;
+}
+
+QPushButton:hover {
+    background-color: rgb(50, 50, 50);
+    border-color: #0078d7;
+}
+
+QPushButton:pressed {
+    background-color: rgb(30, 30, 30);
+    border-color: #0078d7;
+}
+
+QPushButton:disabled {
+    background-color: rgb(30, 30, 30);
+    color: #666666;
+    border-color: rgb(60, 60, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string>Продолжить</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="email">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>110</y>
+     <width>381</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 20px;
+font-size: 13px;
+    min-height: 20px;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+QLineEdit:hover {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QLineEdit:focus {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QLineEdit::placeholder {
+    color: #888888;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>example@mail.ru</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="credentials">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>180</y>
+     <width>381</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 20px;
+font-size: 13px;
+    min-height: 20px;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+QLineEdit:hover {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QLineEdit:focus {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QLineEdit::placeholder {
+    color: #888888;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>IMAP API / App Password</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="apikey">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>320</y>
+     <width>381</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 20px;
+font-size: 13px;
+    min-height: 20px;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+QLineEdit:hover {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QLineEdit:focus {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QLineEdit::placeholder {
+    color: #888888;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>API Ключ</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="provider">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>381</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 20px;
+font-size: 13px;
+    min-height: 20px;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+QComboBox:hover {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid #555555;
+    background-color: #3c3c3c;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+QComboBox::down-arrow {
+    image: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #888888;
+    width: 0;
+    height: 0;
+    margin-right: 5px;
+}</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>Выбор провайдера почты</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Google</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Yandex</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="analyze">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>250</y>
+     <width>381</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 20px;
+font-size: 13px;
+    min-height: 20px;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+QComboBox:hover {
+    border-color: #0078d7;
+    background-color: #404040;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid #555555;
+    background-color: #3c3c3c;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+QComboBox::down-arrow {
+    image: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #888888;
+    width: 0;
+    height: 0;
+    margin-right: 5px;
+}</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>Выбор анализатора файлов</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>VirusTotal</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Dr. Web</string>
+    </property>
+   </item>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
