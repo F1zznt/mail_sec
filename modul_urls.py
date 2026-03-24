@@ -1,6 +1,5 @@
 import re
 import requests
-import base64
 import time
 
 def extract_urls(text: str):
