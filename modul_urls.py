@@ -1,9 +1,6 @@
 import re
 import requests
-import time
 
-def extract_urls(text: str):
-    return re.compile(r'\b(?:https?://|ftp://|www\.)[\w\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE).findall(text or "")
 
 def is_url_safe_drweb(url: str):
     print(f"[URL] Проверка ссылки: {url}", flush=True)
@@ -20,8 +17,9 @@ def is_url_safe_drweb(url: str):
         return False
     return None
 
+
 def analyze_urls_in_text(text: str):
-    urls = extract_urls(text)
+    urls = re.compile(r'\b(?:https?://|ftp://|www\.)[\w\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE).findall(text or "")
     results = []
     for u in urls:
         dr = is_url_safe_drweb(u)
